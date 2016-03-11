@@ -1,0 +1,15 @@
+{
+  "name": "splunk-hec-proxy",
+  "description": "Sample Splunk HTTP Event Collector proxy for notifications such as Azure Alerts",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rarsan/splunk-hec-proxy.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.13.4",
+    "request": "2.69.0",
+    "body-parser": "1.15.0"
+  }
+}
