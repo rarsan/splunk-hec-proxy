@@ -30,7 +30,7 @@ app.use('/services/collector/event', function(req, res) {
   console.log(body);
 
   req.pipe(request({
-    url: req.protocol + '://' + req.hostname + ':8088' +  req.baseUrl,
+    url: req.protocol + '://' + 'splunktest1.westus.cloudapp.azure.com' + ':8088' +  req.baseUrl,
     qs: req.query,
     headers: {
       'Authorization': 'Splunk ' + token
