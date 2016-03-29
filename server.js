@@ -59,7 +59,7 @@ var pidFile = path.resolve(__dirname, './pid.txt');
 fs.writeFileSync(pidFile, process.pid, 'utf-8'); 
 
 // Create an HTTP service.
-var port = process.env.PORT;
+var port = process.env.PORT || HTTP_PORT;
 http.createServer(app).listen(port, function() {
   console.log('Listening to HTTP on port ' + port);
 });
