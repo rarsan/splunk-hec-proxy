@@ -6,7 +6,7 @@ var http = require('http');
 var https = require('https');
 var bodyParser = require('body-parser');
 
-var HTTP_PORT = 8090,
+var HTTP_PORT = 8000,
     HTTPS_PORT = 4443;
 //    SSL_OPTS = {
 //      key: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.key')),
@@ -16,37 +16,52 @@ var HTTP_PORT = 8090,
 require('request').debug = true
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+//app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-app.use('/services/collector/event', function(req, res) {
-  var token = req.query.tokenid;
-  delete req.query.tokenid;
+app.use('/services/collector', function(req, res) {
+  var hec_token = req.query.hec_token,
+      hec_host = req.query.hec_host;
+  delete req.query.hec_token;
+  delete req.query.hec_host;
+
+  if (!hec_token || !hec_host) {
+    return res.status(400).json({
+      error: 'Missing hec_token or hec_host query params'
+    });
+  }
 
   console.log(req.body);
   var body = req.body;
-  if (req.is('application/x-www-form-urlencoded')) {
-    body = JSON.parse(Object.keys(req.body)[0]);
-  }
-  console.log(body);
+//  if (req.is('application/x-www-form-urlencoded')) {
+//    body = JSON.parse(Object.keys(req.body)[0]);
+//  }
+//  console.log(body);
 
-  req.pipe(request({
-    url: req.protocol + '://' + 'splunktest1.westus.cloudapp.azure.com' + ':8088' +  req.baseUrl,
+  request({
+    url: req.protocol + '://' + hec_host + req.baseUrl,
+    method: req.method,
     qs: req.query,
     headers: {
-      'Authorization': 'Splunk ' + token
+      'Authorization': 'Splunk ' + hec_token
     },
     body: JSON.stringify({
       'event': body
     })
-  })).pipe(res);
+  }).on('error', function(error) {
+    console.log("pipe failed: ", error);
+    res.status(500).json({
+      error: error
+    });
+  }).pipe(res);
 });
 
 var pidFile = path.resolve(__dirname, './pid.txt');
 fs.writeFileSync(pidFile, process.pid, 'utf-8'); 
 
 // Create an HTTP service.
-http.createServer(app).listen(HTTP_PORT,function() {
-  console.log('Listening to HTTP on port ' + HTTP_PORT);
+var port = process.env.PORT || HTTP_PORT;
+http.createServer(app).listen(port, function() {
+  console.log('Listening to HTTP on port ' + port);
 });
 
 // Create an HTTPS service identical to the HTTP service.
