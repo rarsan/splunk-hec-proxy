@@ -1,7 +1,7 @@
 ## Sample Proxy for Splunk HTTP Event Collector (Beta)
-[Splunk HTTP Event Collector](http://dev.splunk.com/view/SP-CAAAE6P) supports token-based authentication via HTTP `Authorization` header. This Node.js proxy enables integration with Splunk HTTP Collector of 3rd party notification systems that do not send authentication token via request header but rather via a query parameter.
+[Splunk HTTP Event Collector](http://dev.splunk.com/view/SP-CAAAE6P) supports token-based authentication via HTTP `Authorization` header. This Node.js proxy enables integration with Splunk HTTP Event Collector (HEC) of 3rd party notification systems that do not send authentication token via request header but rather via a query parameter. Examples include:
 
-[Azure Alerts](https://azure.microsoft.com/en-us/documentation/articles/insights-webhooks-alerts/) webhooks are one such example.
+[Azure Alerts](https://azure.microsoft.com/en-us/documentation/articles/insights-webhooks-alerts/) webhooks
 
 ### Getting Started
 * Install with Node.js package manager [npm](http://npmjs.org/):
@@ -23,3 +23,11 @@
     	Listening to HTTP on port 8090
     	Listening to HTTPS on port 4443
 
+* Send request to proxy with required query parameters `hec_token` and `hec_host`:
+
+	POST http://<proxy_url>:8090/services/collector?hec_token=<hec_token>&hec_host=<hec_host>
+
+	where:
+
+	`hec_token`: Splunk HEC token
+	`hec_host`: Splunk HEC endpoint URL and port
