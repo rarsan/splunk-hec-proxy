@@ -6,7 +6,7 @@ var http = require('http');
 var https = require('https');
 var bodyParser = require('body-parser');
 
-var HTTP_PORT = 8000,
+var HTTP_PORT = 8090,
     HTTPS_PORT = 4443;
 //    SSL_OPTS = {
 //      key: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.key')),
@@ -16,7 +16,6 @@ var HTTP_PORT = 8000,
 //require('request').debug = true
 
 app.use(bodyParser.json()); // for parsing application/json
-//app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use('/services/collector', function(req, res) {
   var hec_token = req.query.hec_token,
@@ -30,13 +29,6 @@ app.use('/services/collector', function(req, res) {
     });
   }
 
-  console.log(req.body);
-  var body = req.body;
-//  if (req.is('application/x-www-form-urlencoded')) {
-//    body = JSON.parse(Object.keys(req.body)[0]);
-//  }
-//  console.log(body);
-
   request({
     url: req.protocol + '://' + hec_host + req.baseUrl,
     method: req.method,
@@ -45,7 +37,7 @@ app.use('/services/collector', function(req, res) {
       'Authorization': 'Splunk ' + hec_token
     },
     body: JSON.stringify({
-      'event': body
+      'event': req.body
     })
   }).on('error', function(error) {
     console.log("pipe failed: ", error);
