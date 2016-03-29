@@ -31,5 +31,5 @@
 
 	Example:
    ```	
-	$ curl -H "Content-Type: application/json" "http://myproxy.azurewebsites.net/services/collector?hec_token=63656DF7-05C8-4253-A748-0A72750225D6&hec_host=mysplunk.westus.cloudapp.azure.com:8088"
+	$ curl -H "Content-Type: application/json" "http://myproxy.azurewebsites.net/services/collector?hec_token=63656DF7-05C8-4253-A748-0A72750225D6&hec_host=mysplunk.westus.cloudapp.azure.com:8088" -d '{"foo": "bar"}'
    ```
