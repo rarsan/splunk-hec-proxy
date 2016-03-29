@@ -13,7 +13,7 @@ var HTTP_PORT = 8000,
 //      cert: fs.readFileSync(path.resolve(__dirname,'.ssl/www.example.com.cert'))
 //    };
 
-require('request').debug = true
+//require('request').debug = true
 
 app.use(bodyParser.json()); // for parsing application/json
 //app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
